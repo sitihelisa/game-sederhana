@@ -1,498 +1,318 @@
-```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tebak Nama Binatang 🐾</title>
-
+    <title>🎯 Tebak Hewan — Permainan Seru</title>
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
         }
 
         body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            background:
-                radial-gradient(circle at top left, #8be9ff 0%, transparent 35%),
-                radial-gradient(circle at bottom right, #a78bfa 0%, transparent 35%),
-                linear-gradient(135deg, #101828, #172554);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             padding: 20px;
-            color: white;
         }
 
-        .game {
-            width: 100%;
+        .container {
+            background: #fff;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px 30px;
             max-width: 500px;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border-radius: 28px;
-            padding: 25px;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
-        }
-
-        .header {
+            width: 100%;
             text-align: center;
-            margin-bottom: 22px;
+            animation: muncul 0.8s ease-out;
         }
 
-        .logo {
-            font-size: 55px;
-            margin-bottom: 5px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
+        @keyframes muncul {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
-            font-size: 27px;
-            margin-bottom: 7px;
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
-        .subtitle {
-            color: #dbeafe;
-            font-size: 14px;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .stat {
-            background: rgba(255, 255, 255, 0.1);
+        .skor {
+            display: flex;
+            justify-content: space-between;
+            background: linear-gradient(90deg, #ffecd2, #fcb69f);
+            padding: 12px 20px;
             border-radius: 15px;
-            padding: 12px 5px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            margin-bottom: 25px;
+            font-weight: bold;
+            color: #5a3e36;
         }
 
-        .stat-label {
-            font-size: 11px;
-            color: #bfdbfe;
-            margin-bottom: 4px;
+        .hewan-emoji {
+            font-size: 5rem;
+            margin: 20px 0;
+            animation: goyang 1s infinite;
         }
 
-        .stat-value {
-            font-size: 20px;
+        @keyframes goyang {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .petunjuk {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            font-style: italic;
+            color: #444;
+        }
+
+        .kotak-jawaban {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .kotak-jawaban:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .tombol {
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
             font-weight: bold;
         }
 
-        .question-card {
-            background: linear-gradient(
-                145deg,
-                rgba(255,255,255,0.18),
-                rgba(255,255,255,0.07)
-            );
-            border-radius: 22px;
-            padding: 25px 18px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.15);
-            margin-bottom: 18px;
+        .tombol-kirim {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
         }
 
-        .question-number {
-            font-size: 12px;
-            color: #bfdbfe;
-            margin-bottom: 12px;
+        .tombol-kirim:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(102, 126, 234, 0.4);
         }
 
-        .animal-icon {
-            font-size: 65px;
-            margin-bottom: 12px;
+        .tombol-lewati {
+            background: #ff9a9e;
+            color: white;
         }
 
-        .hint {
-            font-size: 13px;
-            color: #dbeafe;
+        .tombol-lewati:hover {
+            background: #ff6b6b;
+        }
+
+        .hasil {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .benar {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .salah {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .akhir {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .akhir h2 {
+            color: #667eea;
             margin-bottom: 15px;
         }
 
-        .letters {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 7px;
-            min-height: 55px;
-        }
-
-        .letter {
-            width: 39px;
-            height: 45px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.15);
-            border: 2px solid rgba(255,255,255,0.2);
-            font-size: 21px;
-            font-weight: bold;
+        .tombol-ulang {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
             color: white;
         }
 
-        .input-area {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        input {
-            flex: 1;
-            min-width: 0;
-            padding: 15px;
-            border-radius: 14px;
-            border: 2px solid transparent;
-            outline: none;
-            background: rgba(255,255,255,0.95);
-            color: #111827;
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: lowercase;
-        }
-
-        input:focus {
-            border-color: #60a5fa;
-        }
-
-        button {
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-
-        .check-btn {
-            padding: 0 20px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #38bdf8, #6366f1);
-            color: white;
-            font-size: 15px;
-            box-shadow: 0 8px 20px rgba(59,130,246,0.25);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-        }
-
-        button:active {
-            transform: scale(0.96);
-        }
-
-        .message {
-            min-height: 25px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-            margin: 8px 0;
-        }
-
-        .correct {
-            color: #86efac;
-        }
-
-        .wrong {
-            color: #fca5a5;
-        }
-
-        .next-btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: 14px;
-            background: rgba(255,255,255,0.14);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            font-size: 15px;
-            display: none;
-        }
-
-        .next-btn.show {
-            display: block;
-        }
-
-        .hint-btn {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border-radius: 14px;
-            background: rgba(250,204,21,0.16);
-            border: 1px solid rgba(250,204,21,0.25);
-            color: #fde68a;
-            font-size: 14px;
-        }
-
-        .restart-btn {
-            width: 100%;
-            padding: 14px;
-            margin-top: 10px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #f97316, #ef4444);
-            color: white;
-            font-size: 15px;
-            display: none;
-        }
-
-        .restart-btn.show {
-            display: block;
-        }
-
-        .hint-text {
-            margin-top: 10px;
-            font-size: 13px;
-            color: #fde68a;
-            min-height: 18px;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 18px;
-            font-size: 11px;
-            color: #bfdbfe;
-        }
-
-        .shake {
-            animation: shake 0.35s;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-7px); }
-            75% { transform: translateX(7px); }
-        }
-
-        .pop {
-            animation: pop 0.35s;
-        }
-
-        @keyframes pop {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .game-over {
-            text-align: center;
-            display: none;
-        }
-
-        .game-over.show {
-            display: block;
-        }
-
-        .game-over-icon {
-            font-size: 75px;
-            margin-bottom: 10px;
-        }
-
-        .final-score {
-            font-size: 35px;
-            font-weight: bold;
-            margin: 12px 0;
-        }
-
-        @media (max-width: 400px) {
-            .game {
-                padding: 18px;
-                border-radius: 22px;
-            }
-
-            h1 {
-                font-size: 23px;
-            }
-
-            .letter {
-                width: 34px;
-                height: 40px;
-                font-size: 18px;
-            }
-
-            .animal-icon {
-                font-size: 55px;
-            }
-
-            .input-area {
-                flex-direction: column;
-            }
-
-            .check-btn {
-                padding: 13px;
-            }
+        .tombol-ulang:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
-
 <body>
-
-<div class="game">
-
-    <!-- HEADER -->
-    <div class="header">
-        <div class="logo">🐾</div>
-        <h1>Tebak Nama Binatang</h1>
-        <p class="subtitle">
-            Tebak nama hewan berdasarkan inisialnya!
-        </p>
-    </div>
-
-    <!-- STATISTIK -->
-    <div class="stats">
-        <div class="stat">
-            <div class="stat-label">SKOR</div>
-            <div class="stat-value" id="score">0</div>
+    <div class="container">
+        <h1>🐾 TEBAK HEWAN 🐾</h1>
+        
+        <div class="skor">
+            <div>✅ Benar: <span id="jumlahBenar">0</span></div>
+            <div>❌ Salah: <span id="jumlahSalah">0</span></div>
+            <div>📊 Soal: <span id="nomorSoal">1</span>/10</div>
         </div>
 
-        <div class="stat">
-            <div class="stat-label">SOAL</div>
-            <div class="stat-value">
-                <span id="questionNumber">1</span>/<span id="totalQuestion">10</span>
-            </div>
+        <div id="areaPermainan">
+            <div class="hewan-emoji" id="emojiHewan">🐶</div>
+            <div class="petunjuk" id="petunjuk">Hewan ini adalah sahabat manusia dan suka menggonggong</div>
+            
+            <input type="text" class="kotak-jawaban" id="jawabanPengguna" placeholder="Ketik nama hewan di sini..." autocomplete="off">
+            
+            <br>
+            <button class="tombol tombol-kirim" onclick="cekJawaban()">✅ Kirim Jawaban</button>
+            <button class="tombol tombol-lewati" onclick="lewatiSoal()">⏭️ Lewati</button>
+            
+            <div class="hasil" id="tampilHasil"></div>
         </div>
 
-        <div class="stat">
-            <div class="stat-label">NYAWA</div>
-            <div class="stat-value" id="lives">❤️❤️❤️</div>
+        <div class="akhir" id="areaAkhir">
+            <h2>🎉 Permainan Selesai! 🎉</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 15px;">Skor Akhir Kamu:</p>
+            <p style="font-size: 2rem; font-weight: bold; color: #667eea;" id="skorAkhir"></p>
+            <button class="tombol tombol-ulang" onclick="mulaiUlang()">🔄 Main Lagi</button>
         </div>
     </div>
 
-    <!-- AREA GAME -->
-    <div id="gameArea">
+    <script>
+        // Daftar Soal Tebak Hewan
+        const daftarHewan = [
+            { nama: "anjing", emoji: "🐶", petunjuk: "Sahabat setia manusia, suka menggonggong" },
+            { nama: "kucing", emoji: "🐱", petunjuk: "Suka makan ikan, mengeong, dan tidur panjang" },
+            { nama: "gajah", emoji: "🐘", petunjuk: "Hewan darat terbesar, punya belalai panjang" },
+            { nama: "singa", emoji: "🦁", petunjuk: "Raja hutan, memiliki surai yang gagah" },
+            { nama: "kuda", emoji: "🐴", petunjuk: "Bisa berlari cepat, sering ditunggangi" },
+            { nama: "burung", emoji: "🐦", petunjuk: "Punya sayap, bisa terbang di langit" },
+            { nama: "ikan", emoji: "🐟", petunjuk: "Hidup di air, bernapas dengan insang" },
+            { nama: "kelinci", emoji: "🐰", petunjuk: "Telinganya panjang, suka makan wortel" },
+            { nama: "ular", emoji: "🐍", petunjuk: "Tidak berkaki, merayap di tanah" },
+            { nama: "panda", emoji: "🐼", petunjuk: "Berbulu hitam putih, suka makan bambu" }
+        ];
 
-        <div class="question-card" id="questionCard">
+        let indeksSekarang = 0;
+        let jumlahBenar = 0;
+        let jumlahSalah = 0;
+        let sudahDijawab = false;
 
-            <div class="question-number">
-                SOAL <span id="questionTextNumber">1</span>
-            </div>
+        // Tampilkan soal pertama
+        tampilkanSoal();
 
-            <div class="animal-icon" id="animalIcon">
-                🐱
-            </div>
+        function tampilkanSoal() {
+            const soal = daftarHewan[indeksSekarang];
+            document.getElementById("emojiHewan").textContent = soal.emoji;
+            document.getElementById("petunjuk").textContent = soal.petunjuk;
+            document.getElementById("jawabanPengguna").value = "";
+            document.getElementById("tampilHasil").style.display = "none";
+            document.getElementById("nomorSoal").textContent = indeksSekarang + 1;
+            sudahDijawab = false;
+        }
 
-            <p class="hint">
-                Hewan apakah ini?
-            </p>
+        function cekJawaban() {
+            if (sudahDijawab) return;
+            
+            const jawabanPengguna = document.getElementById("jawabanPengguna").value.trim().toLowerCase();
+            const jawabanBenar = daftarHewan[indeksSekarang].nama;
+            const tampilHasil = document.getElementById("tampilHasil");
 
-            <!-- INISIAL -->
-            <div class="letters" id="letters"></div>
+            if (!jawabanPengguna) {
+                alert("Silakan ketik jawabanmu terlebih dahulu!");
+                return;
+            }
 
-        </div>
+            sudahDijawab = true;
 
-        <!-- INPUT -->
-        <div class="input-area">
-            <input
-                type="text"
-                id="answerInput"
-                placeholder="Ketik jawaban..."
-                autocomplete="off"
-                maxlength="30"
-            >
+            if (jawabanPengguna === jawabanBenar) {
+                jumlahBenar++;
+                tampilHasil.textContent = "✅ BENAR! Hebat sekali!";
+                tampilHasil.className = "hasil benar";
+            } else {
+                jumlahSalah++;
+                tampilHasil.textContent = `❌ SALAH! Jawabannya adalah: ${jawabanBenar}`;
+                tampilHasil.className = "hasil salah";
+            }
 
-            <button class="check-btn" onclick="checkAnswer()">
-                CEK
-            </button>
-        </div>
+            tampilHasil.style.display = "block";
+            perbaruiSkor();
 
-        <!-- PESAN -->
-        <div class="message" id="message"></div>
+            setTimeout(soalBerikutnya, 1500);
+        }
 
-        <!-- PETUNJUK -->
-        <button class="hint-btn" id="hintButton" onclick="showHint()">
-            💡 Gunakan Petunjuk
-        </button>
+        function lewatiSoal() {
+            if (sudahDijawab) return;
+            sudahDijawab = true;
+            jumlahSalah++;
+            const tampilHasil = document.getElementById("tampilHasil");
+            tampilHasil.textContent = `⏭️ Dilewati. Jawabannya: ${daftarHewan[indeksSekarang].nama}`;
+            tampilHasil.className = "hasil salah";
+            tampilHasil.style.display = "block";
+            perbaruiSkor();
+            setTimeout(soalBerikutnya, 1500);
+        }
 
-        <div class="hint-text" id="hintText"></div>
+        function soalBerikutnya() {
+            indeksSekarang++;
+            if (indeksSekarang < daftarHewan.length) {
+                tampilkanSoal();
+            } else {
+                tampilkanHasilAkhir();
+            }
+        }
 
-        <!-- SOAL BERIKUTNYA -->
-        <button class="next-btn" id="nextButton" onclick="nextQuestion()">
-            Soal Berikutnya ➜
-        </button>
+        function perbaruiSkor() {
+            document.getElementById("jumlahBenar").textContent = jumlahBenar;
+            document.getElementById("jumlahSalah").textContent = jumlahSalah;
+        }
 
-    </div>
+        function tampilkanHasilAkhir() {
+            document.getElementById("areaPermainan").style.display = "none";
+            document.getElementById("areaAkhir").style.display = "block";
+            
+            const persentase = Math.round((jumlahBenar / daftarHewan.length) * 100);
+            let pesan = "";
+            
+            if (persentase === 100) pesan = "🏆 Sempurna! Kamu jenius!";
+            else if (persentase >= 80) pesan = "🌟 Luar biasa! Kerja bagus!";
+            else if (persentase >= 60) pesan = "👍 Bagus! Tetap semangat!";
+            else pesan = "💪 Jangan menyerah, coba lagi ya!";
 
-    <!-- GAME OVER -->
-    <div class="game-over" id="gameOver">
+            document.getElementById("skorAkhir").innerHTML = 
+                `${jumlahBenar} dari ${daftarHewan.length} soal<br>
+                ${persentase}% Benar<br>
+                ${pesan}`;
+        }
 
-        <div class="game-over-icon">🏆</div>
+        function mulaiUlang() {
+            indeksSekarang = 0;
+            jumlahBenar = 0;
+            jumlahSalah = 0;
+            document.getElementById("areaPermainan").style.display = "block";
+            document.getElementById("areaAkhir").style.display = "none";
+            perbaruiSkor();
+            tampilkanSoal();
+        }
 
-        <h2>Permainan Selesai!</h2>
-
-        <p style="margin-top:8px;color:#dbeafe;">
-            Kamu telah menyelesaikan semua soal.
-        </p>
-
-        <div class="final-score">
-            <span id="finalScore">0</span> Poin
-        </div>
-
-        <p id="resultMessage" style="color:#bfdbfe;"></p>
-
-        <button class="restart-btn show" onclick="restartGame()">
-            🔄 Main Lagi
-        </button>
-
-    </div>
-
-    <div class="footer">
-        🐶 🐱 🐰 🦁 🐯 🐼 🐸 🐵 🐘 🦒
-        <br><br>
-        Game Tebak Binatang • Dibuat dengan HTML, CSS & JavaScript
-    </div>
-
-</div>
-
-
-<script>
-
-    /* ==========================================
-       DATA HEWAN
-       ========================================== */
-
-    const animals = [
-        {
-            name: "kucing",
-            icon: "🐱",
-            hint: "Hewan peliharaan yang suka mengeong."
-        },
-        {
-            name: "anjing",
-            icon: "🐶",
-            hint: "Hewan yang terkenal dengan suara menggonggong."
-        },
-        {
-            name: "kelinci",
-            icon: "🐰",
-            hint: "Hewan dengan telinga panjang yang suka melompat."
-        },
-        {
-            name: "singa",
-            icon: "🦁",
-            hint: "Dikenal sebagai raja hutan."
-        },
-        {
-            name: "harimau",
-            icon: "🐯",
-            hint: "Kucing besar dengan corak belang."
-        },
-        {
-            name: "gajah",
-            icon: "🐘",
-            hint: "Hewan besar dengan belalai panjang."
-        },
-        {
-            name: "monyet",
-```
+        // Izinkan tekan Enter untuk mengirim jawaban
+        document.getElementById("jawabanPengguna").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") cekJawaban();
+        });
+    </script>
+</body>
+</html>
